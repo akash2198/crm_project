@@ -1,0 +1,19 @@
+name: counselor-crm-mongodb
+services:
+  mongo:
+    image: mongo:8.0
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: crm
+      MONGO_INITDB_ROOT_PASSWORD: crm_local_password
+    ports:
+      - "127.0.0.1:27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "quit(db.adminCommand('ping').ok ? 0 : 1)"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+volumes:
+  mongo_data:
